@@ -1,23 +1,23 @@
 #include <stdio.h>
 #include <string.h>
 
-#define TOTAL_STUDENTS 2
+#define TOTAL_STUDENTS 20
 #define TOTAL_SUBJECTS 5
 #define TOTAL_TERMS 4
 
 const char *subjectNames[TOTAL_SUBJECTS] = {"English", "Hindi", "Mathematics",
                                             "Science", "Social Science"};
 
-struct Student {
+typedef struct student {
   int rollNumber;
-  char studentName[50];
+  char name[50];
   float termMarks[TOTAL_TERMS][TOTAL_SUBJECTS];
   float totalMarks;
   float overallPercentage;
   int failedSubjectCount;
   char finalGrade[5];
   char promotionStatus[20];
-};
+} Student;
 
 // Clear leftover characters from input buffer
 void clearInputBuffer() {
@@ -55,7 +55,7 @@ void assignGradeAndStatus(float percentage, int failedCount, char *grade,
 }
 
 int main() {
-  struct Student students[TOTAL_STUDENTS];
+  Student students[TOTAL_STUDENTS];
 
   printf("=== CBSE Class VIII Progress Report System ===\n");
   printf("Defaults: %d Students | %d Terms | %d Subjects\n", TOTAL_STUDENTS,
@@ -69,7 +69,7 @@ int main() {
     printf("  Roll No : %d\n", students[i].rollNumber);
 
     printf("  Name    : ");
-    scanf("%49s", students[i].studentName); // Safe string input
+    scanf("%49s", students[i].name); // Safe string input
 
     students[i].totalMarks = 0.0f;
     students[i].failedSubjectCount = 0;
@@ -113,7 +113,7 @@ int main() {
   printf("--------------------------------------------\n");
   for (int i = 0; i < TOTAL_STUDENTS; i++) {
     printf("%-6d %-15s %-8.2f %-12s\n", students[i].rollNumber,
-           students[i].studentName, students[i].overallPercentage,
+           students[i].name, students[i].overallPercentage,
            students[i].promotionStatus);
   }
 
@@ -125,8 +125,8 @@ int main() {
     for (int i = 0; i < TOTAL_STUDENTS; i++) {
       if (students[i].rollNumber == searchRoll) {
         found = 1;
-        printf("\n=== PROGRESS REPORT: %s (Roll %d) ===\n",
-               students[i].studentName, students[i].rollNumber);
+        printf("\n=== PROGRESS REPORT: %s (Roll %d) ===\n", students[i].name,
+               students[i].rollNumber);
         printf("Status: %s | Overall: %.2f%% | Grade: %s\n",
                students[i].promotionStatus, students[i].overallPercentage,
                students[i].finalGrade);
