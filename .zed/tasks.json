@@ -1,16 +1,19 @@
 [
   {
     "label": "Compile and Run C",
-    "command": "if [[ $ZED_FILE == *.c ]]; then mkdir -p ./output && gcc \"$ZED_FILE\" -o \"./output/$ZED_STEM\" && \"./output/$ZED_STEM\"; else echo 'Not a C file'; fi",
+    "command": "if [[ $ZED_FILE == *.c ]]; then mkdir -p ./output && time gcc \"$ZED_FILE\" -o \"./output/$ZED_STEM\" && \"./output/$ZED_STEM\"; else echo 'Not a C file'; fi",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
     "reveal": "always",
+    "show_command": false,
+    "reveal_target": "dock",
   },
   {
     "label": "Run python",
     "command": "if [[ $ZED_FILE == *.py ]]; then mkdir -p ./output && python3 \"$ZED_FILE\"; else echo 'Not a Python file'; fi",
-    "use_new_terminal": false,
+    "use_new_terminal": true,
     "allow_concurrent_runs": false,
     "reveal": "always",
+    "show_command": false,
   },
 ]
