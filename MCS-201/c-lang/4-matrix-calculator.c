@@ -61,7 +61,8 @@ int main() {
     printf("=== Matrix Operation: D = A + (B × C) ===\n\n");
 
     // Input matrices
-    inputMatrix("A", A); inputMatrix("B", B);
+    inputMatrix("A", A);
+    inputMatrix("B", B);
     inputMatrix("C", C);
 
     // Display input matrices
