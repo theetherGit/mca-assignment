@@ -1,15 +1,19 @@
 def get_grade():
-    """Get grade for the use input."""
-    try:
-        # Prompt the user for input
-        score_input = input("Enter a score between 0.0 and 1.0: ")
-        score = float(score_input)
+    """Reads a score, validates it, and prints the corresponding grade."""
+    while True:  # Loop until valid input & grading is complete
+        try:
+            # Step 1: Prompt & convert input to float
+            score_input = input("Enter a score between 0.0 and 1.0: ")
+            score = float(score_input)
 
-        # Check if the score is out of range
-        if score < 0.0 or score > 1.0:
-            print("Error: Score is out of range.")
-        else:
-            # Determine the grade based on the score
+            # Step 2: Validate range (inclusive 0.0 to 1.0)
+            if not (0.0 <= score <= 1.0):
+                print(
+                    "Error: Score out of range. Please enter a value between 0.0 and 1.0.\n"
+                )
+                continue  # Restart loop for new input
+
+            # Step 3: Map score to grade using descending thresholds
             if score >= 0.9:
                 grade = "A"
             elif score >= 0.8:
@@ -21,13 +25,14 @@ def get_grade():
             else:
                 grade = "F"
 
+            # Step 4: Display result & exit loop
             print(f"Grade: {grade}")
+            break  # Successful execution → exit validation loop
+        except ValueError:
+            # Catches non-numeric inputs like "abc", "0.8x", or empty strings
+            print("Error: Invalid input. Please enter a numeric value.\n")
 
-    except ValueError:
-        # Handle cases where the input is not a valid number
-        print("Error: Invalid input. Please enter a numeric value.")
 
-
-# Run the function
+# Standard Python entry point
 if __name__ == "__main__":
     get_grade()
