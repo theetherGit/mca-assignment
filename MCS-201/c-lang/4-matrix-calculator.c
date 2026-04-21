@@ -10,10 +10,10 @@ void clearBuffer() {
 }
 
 /* Function to handle user input one index at a time with validation */
-void inputMatrix(const char *name, int mat[3][3]) {
+void inputMatrix(const char *name, int mat[SIZE][SIZE]) {
     printf("\n--- Enter elements for Matrix %s (3x3) ---\n", name);
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
             printf("Enter element %s[%d][%d]: ", name, i, j);
 
             // Validate that the input is actually an integer
@@ -61,8 +61,7 @@ int main() {
     printf("=== Matrix Operation: D = A + (B × C) ===\n\n");
 
     // Input matrices
-    inputMatrix("A", A);
-    inputMatrix("B", B);
+    inputMatrix("A", A); inputMatrix("B", B);
     inputMatrix("C", C);
 
     // Display input matrices
