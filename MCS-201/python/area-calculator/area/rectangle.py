@@ -1,6 +1,6 @@
-# area/rectangle.py
+# Area/rectangle.py
 
 
-def area(length: float, width: float) -> float:
+def area(length, width):
     """Calculate and return the area of a rectangle."""
     return length * width

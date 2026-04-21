@@ -1,22 +1,37 @@
-# main.py
+# Import functions from the Area package using aliases to avoid naming conflicts
+from Area.circle import area as circle_area
+from Area.rectangle import area as rectangle_area
+from Area.square import area as square_area
 
-from area import circle, rectangle, square
+
+def get_positive_float(prompt):
+    """Helper: Repeatedly prompts until a valid positive float is entered."""
+    while True:
+        try:
+            value = float(input(prompt))
+            if value <= 0:
+                print("  ⚠️ Value must be greater than 0. Try again.")
+                continue
+            return value
+        except ValueError:
+            print("  ⚠️ Invalid input. Please enter a numeric value.")
 
 
 def main():
-    print("--- Area Calculator Demo ---")
+    print("=== Modular Area Calculator ===\n")
 
     # Square
-    s_side = 5.0
-    print(f"Square (side={s_side}): {square.area(s_side):.2f}")
+    side = get_positive_float("Enter side of square: ")
+    print(f"▶ Square Area  : {square_area(side):.2f} sq units\n")
 
     # Circle
-    c_radius = 3.0
-    print(f"Circle (radius={c_radius}): {circle.area(c_radius):.2f}")
+    radius = get_positive_float("Enter radius of circle: ")
+    print(f"▶ Circle Area  : {circle_area(radius):.2f} sq units\n")
 
     # Rectangle
-    r_length, r_width = 4.0, 6.0
-    print(f"Rectangle ({r_length}x{r_width}): {rectangle.area(r_length, r_width):.2f}")
+    length = get_positive_float("Enter length of rectangle: ")
+    width = get_positive_float("Enter width of rectangle: ")
+    print(f"▶ Rectangle Area: {rectangle_area(length, width):.2f} sq units\n")
 
 
 if __name__ == "__main__":
