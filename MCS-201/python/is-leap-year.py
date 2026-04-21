@@ -1,56 +1,43 @@
-def is_leap_year(year: int) -> bool:
-    """Determine whether a given year is a leap year.
-
-    Leap Year Rules (Gregorian Calendar):
-    1. A year divisible by 4 is a leap year.
-    2. EXCEPT if it's divisible by 100, it's NOT a leap year.
-    3. UNLESS it's also divisible by 400, then it IS a leap year.
-
-    Args:
-        year (int): The year to evaluate.
-
-    Return:
-        bool: True if the year is a leap year, False otherwise.
-
-    """
-    # Step 1: Check if the year is divisible by 4
-    if year % 4 == 0:
-        # Step 2: If divisible by 100, apply the 400-year exception rule
-        if year % 100 == 0:
-            # Divisible by both 100 and 400 -> Leap Year
-            return year % 400 == 0
-        # Divisible by 4 but NOT by 100 -> Leap Year
-        return True
-    # Not divisible by 4 -> Not a Leap Year
-    return False
+# =============================================================================
+# Program: Leap Year Checker
+# Description: Determines if a user-entered year is a leap year using
+#              Gregorian calendar rules. Includes input validation & comments.
+# =============================================================================
 
 
-def main():
-    """Handle user input, validation, and displays the result."""
-    try:
-        # Prompt the user to enter a year
-        user_input = input("Enter a year to check: ")
-        year = int(user_input)
+def check_leap_year():
+    """Determine whether a given year is a leap year."""
+    while True:  # Loop until valid input is processed
+        try:
+            # Step 1: Get user input and safely convert to integer
+            year = int(input("Enter a year to check: "))
 
-        # Basic validation: years must be positive in the Gregorian calendar
-        if year <= 0:
-            print("Please enter a valid positive year.")
-            return
+            # Step 2: Apply leap year logic in priority order
+            # Rule 1: Centurial years divisible by 400 ARE leap years (e.g., 2000)
+            if year % 400 == 0:
+                is_leap = True
+            # Rule 2: Centurial years NOT divisible by 400 are NOT leap years (e.g., 1900)
+            elif year % 100 == 0:
+                is_leap = False
+            # Rule 3: Non-centurial years divisible by 4 ARE leap years (e.g., 2024)
+            elif year % 4 == 0:
+                is_leap = True
+            # Rule 4: All remaining years are NOT leap years
+            else:
+                is_leap = False
 
-        # Check leap year status and display the appropriate message
-        if is_leap_year(year):
-            print(f"✅ {year} is a leap year.")
-        else:
-            print(f"❌ {year} is not a leap year.")
+            # Step 3: Display result and exit the loop
+            if is_leap:
+                print(f"✅ {year} is a Leap Year.")
+            else:
+                print(f"❌ {year} is NOT a Leap Year.")
+            break  # Exit while loop after successful processing
 
-    except ValueError:
-        # Catches cases where the input cannot be converted to an integer
-        print("⚠️ Invalid input. Please enter a numeric year.")
+        except ValueError:
+            # Catches inputs like "abc", "20.5", or empty entries
+            print("⚠️ Invalid input. Please enter a valid integer year.")
 
 
-# Standard Python practice: ensures the script runs only when executed directly
+# Standard Python entry point
 if __name__ == "__main__":
-    main()
-
-    # import calendar
-    # print(calendar.isleap(2024))
+    check_leap_year()
