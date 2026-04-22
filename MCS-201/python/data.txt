@@ -1,0 +1,5 @@
+Python programming is fun and powerful.
+File handling makes data processing easy.
+Lambda functions simplify code structure.
+Always validate user inputs properly.
+Python is widely used in academia and industry.
