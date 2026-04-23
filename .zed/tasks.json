@@ -16,4 +16,12 @@
     "reveal": "always",
     "show_command": false,
   },
+  {
+    "label": "Run rust",
+    "command": "if [[ $ZED_FILE == *.rs ]]; then mkdir -p ./output && rustc \"$ZED_FILE\" -o \"./output/$ZED_STEM\" && \"./output/$ZED_STEM\"; else echo 'Not a Rust file'; fi",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "show_command": false,
+  },
 ]
