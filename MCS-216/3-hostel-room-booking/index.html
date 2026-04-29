@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Hostel Room Booking</title>
+        <style>
+            /* Reset and Base Styles */
+            * {
+                box-sizing: border-box;
+                font-family: sans-serif;
+            }
+
+            body {
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                items-center: center;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background-color: white;
+                color: black;
+                gap: 20px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            /* Form Layout */
+            #bookingForm {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                min-width: 500px;
+            }
+
+            .form-group {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+                width: 100%;
+            }
+
+            /* Inputs and Selects */
+            input[type="text"],
+            input[type="email"],
+            input[type="date"],
+            select {
+                border: 1px solid #ccc;
+                border-radius: 0.375rem;
+                padding: 4px;
+                width: 100%;
+            }
+
+            /* Custom Select Arrow Logic */
+            select {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                cursor: pointer;
+                background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23333" d="M7 10l5 5 5-5z"/></svg>');
+                background-repeat: no-repeat;
+                background-position: right 10px top 50%;
+                background-size: 20px;
+                padding-right: 30px;
+            }
+
+            /* Radio Buttons Layout */
+            .radio-group {
+                display: flex;
+                flex-direction: row;
+                gap: 16px;
+            }
+
+            .radio-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            input[type="radio"] {
+                cursor: pointer;
+            }
+
+            /* Buttons */
+            .button-group {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            button {
+                border: 1px solid #ccc;
+                padding: 6px 12px;
+                background: transparent;
+                cursor: pointer;
+                border-radius: 4px;
+            }
+
+            button:hover {
+                background-color: #f3f3f3;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Hostel Room Booking</h2>
+        <form id="bookingForm" onsubmit="return validateForm(event);">
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" />
+            </div>
+
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" />
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" />
+            </div>
+
+            <div class="form-group">
+                <label for="arrival">Arrival Date</label>
+                <input type="date" id="arrival" name="arrival" />
+            </div>
+
+            <div class="form-group">
+                <label for="departure">Departure Date</label>
+                <input type="date" id="departure" name="departure" />
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country</label>
+                <select id="country" name="country">
+                    <option value="">Select Country</option>
+                    <option value="IN">India</option>
+                    <option value="US">USA</option>
+                    <option value="UK">UK</option>
+                    <option value="CA">Canada</option>
+                    <option value="AU">Australia</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Payment Mode</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        Debit Card
+                        <input
+                            type="radio"
+                            name="payment_mode"
+                            value="Debit Card"
+                        />
+                    </label>
+                    <label class="radio-item">
+                        Credit Card
+                        <input
+                            type="radio"
+                            name="payment_mode"
+                            value="Credit Card"
+                        />
+                    </label>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit">Submit</button>
+                <button type="reset">Reset</button>
+            </div>
+        </form>
+
+        <script>
+            const arrivalElement = document.getElementById("arrival");
+            const departureElement = document.getElementById("departure");
+            const today = new Date().toISOString().split("T")[0];
+
+            arrivalElement.min = today;
+            arrivalElement.value = today;
+            departureElement.min = today;
+
+            arrivalElement.addEventListener("change", () => {
+                departureElement.min = arrivalElement.value;
+            });
+
+            const fields = [
+                {
+                    id: "first_name",
+                    check: (v) => v.trim().length >= 2,
+                    message:
+                        "Please enter at least 2 characters for your first name.",
+                },
+                {
+                    id: "last_name",
+                    check: (v) => v.trim().length >= 2,
+                    message:
+                        "Please enter at least 2 characters for your first name.",
+                },
+                {
+                    id: "email",
+                    check: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+                    message: "That doesn't look like a valid email address.",
+                },
+                {
+                    id: "arrival",
+                    check: (v) => v !== "",
+                    message: "Please select an arrival date.",
+                },
+                {
+                    id: "departure",
+                    check: (v, arrivalDate) =>
+                        v !== "" && new Date(arrivalDate) < new Date(v),
+                    message: "Please provide a valid departure date.",
+                },
+                {
+                    id: "country",
+                    check: (v) => v !== "",
+                    message: "Please select your country.",
+                },
+            ];
+
+            function clearRadioErrors() {
+                const radios = document.querySelectorAll(
+                    'input[name="payment_mode"]',
+                );
+                radios.forEach((r) => r.setCustomValidity(""));
+            }
+
+            document
+                .querySelectorAll('input[name="payment_mode"]')
+                .forEach((radio) => {
+                    radio.addEventListener("change", clearRadioErrors);
+                });
+
+            function removeCustomValidityMessage(e) {
+                e.target.setCustomValidity("");
+                e.target.style["borderColor"] = "#ccc";
+            }
+
+            function validateForm(e) {
+                e.preventDefault();
+                let isFormValid = true;
+                const form = e.target;
+
+                fields.forEach((f) =>
+                    document.getElementById(f.id).setCustomValidity(""),
+                );
+
+                const radios = form.querySelectorAll(
+                    'input[name="payment_mode"]',
+                );
+                radios.forEach((r) => r.setCustomValidity(""));
+
+                for (const field of fields) {
+                    const inputEl = document.getElementById(field.id);
+                    const isValid =
+                        field.id === "departure"
+                            ? field.check(inputEl.value, arrivalElement.value)
+                            : field.check(inputEl.value);
+                    if (!isValid) {
+                        inputEl.setCustomValidity(field.message);
+                        inputEl.reportValidity();
+                        inputEl.addEventListener(
+                            "change",
+                            removeCustomValidityMessage,
+                            { once: true },
+                        );
+                        inputEl.style.borderColor = "red";
+                        isFormValid = false;
+                        return;
+                    }
+                }
+
+                const paymentSelected = form.querySelector(
+                    'input[name="payment_mode"]:checked',
+                );
+
+                if (isFormValid && !paymentSelected) {
+                    // We pick the first radio to attach the error bubble to
+                    const firstRadio = form.querySelector(
+                        'input[name="payment_mode"]',
+                    );
+                    firstRadio.setCustomValidity(
+                        "Please select a payment method.",
+                    );
+                    firstRadio.reportValidity();
+                    isFormValid = false;
+                }
+
+                if (isFormValid) {
+                    const data = Object.fromEntries(
+                        new FormData(form).entries(),
+                    );
+                    console.log("Success! Data:", data);
+                    alert("Booking Submitted!");
+                    form.reset();
+                }
+                return false;
+            }
+        </script>
+    </body>
+</html>

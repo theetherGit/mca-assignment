@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Hostel Room Booking</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 500px;
+                margin: 30px auto;
+                padding: 20px;
+                background: #f8f9fa;
+            }
+            .field {
+                margin-bottom: 12px;
+            }
+            label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 4px;
+            }
+            input,
+            select {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            .error {
+                color: red;
+                font-size: 0.85em;
+                display: none;
+                margin-top: 3px;
+            }
+            .payment-options {
+                display: flex;
+                gap: 15px;
+                margin: 5px 0;
+            }
+            .payment-options label {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-weight: normal;
+                cursor: pointer;
+            }
+            .payment-options input {
+                width: auto;
+                margin: 0;
+            }
+            button {
+                padding: 10px 18px;
+                margin-right: 10px;
+                cursor: pointer;
+                border: none;
+                border-radius: 4px;
+                color: #fff;
+                font-weight: bold;
+            }
+            .submit {
+                background: #28a745;
+            }
+            .reset {
+                background: #6c757d;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="bookingForm">
+            <h2>Hostel Room Booking</h2>
+            <div class="field">
+                <label>First Name *</label>
+                <input type="text" id="fname" />
+                <span class="error" id="err-fname">Required</span>
+            </div>
+            <div class="field">
+                <label>Last Name *</label>
+                <input type="text" id="lname" />
+                <span class="error" id="err-lname">Required</span>
+            </div>
+            <div class="field">
+                <label>Email *</label>
+                <input type="email" id="email" />
+                <span class="error" id="err-email">Valid email required</span>
+            </div>
+            <div class="field">
+                <label>Arrival Date *</label>
+                <input type="date" id="arrival" />
+                <span class="error" id="err-arrival">Required</span>
+            </div>
+            <div class="field">
+                <label>Departure Date *</label>
+                <input type="date" id="departure" />
+                <span class="error" id="err-departure">Required</span>
+            </div>
+            <div class="field">
+                <label>Country *</label>
+                <select id="country">
+                    <option value="">Select Country</option>
+                    <option value="IN">India</option>
+                    <option value="US">USA</option>
+                    <option value="UK">UK</option>
+                    <option value="CA">Canada</option>
+                    <option value="AU">Australia</option>
+                </select>
+                <span class="error" id="err-country">Required</span>
+            </div>
+            <div class="field">
+                <label>Payment Mode * (Select one)</label>
+                <div class="payment-options">
+                    <label
+                        ><input
+                            type="checkbox"
+                            name="payment"
+                            value="Debit Card"
+                        />
+                        Debit Card</label
+                    >
+                    <label
+                        ><input
+                            type="checkbox"
+                            name="payment"
+                            value="Credit Card"
+                        />
+                        Credit Card</label
+                    >
+                </div>
+                <span class="error" id="err-payment"
+                    >Please select exactly one payment mode</span
+                >
+            </div>
+            <button type="submit" class="submit">Submit</button>
+            <button type="reset" class="reset">Reset</button>
+        </form>
+
+        <script>
+            // FIX: Enforce single selection on checkboxes
+            document.querySelectorAll('input[name="payment"]').forEach((cb) => {
+                cb.addEventListener("change", function () {
+                    if (this.checked) {
+                        document
+                            .querySelectorAll('input[name="payment"]')
+                            .forEach((other) => {
+                                if (other !== this) other.checked = false;
+                            });
+                    }
+                });
+            });
+
+            function validateForm(e) {
+                e.preventDefault();
+                let isValid = true;
+
+                const setError = (id, show) =>
+                    (document.getElementById(id).style.display = show
+                        ? "block"
+                        : "none");
+
+                // Text fields
+                ["fname", "lname"].forEach((id) => {
+                    const val = document.getElementById(id).value.trim();
+                    setError("err-" + id, val === "");
+                    if (val === "") isValid = false;
+                });
+
+                // Email validation
+                const email = document.getElementById("email").value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                setError("err-email", !emailRegex.test(email));
+                if (!emailRegex.test(email)) isValid = false;
+
+                // Date fields
+                ["arrival", "departure"].forEach((id) => {
+                    const val = document.getElementById(id).value;
+                    setError("err-" + id, val === "");
+                    if (val === "") isValid = false;
+                });
+
+                // Country dropdown
+                const country = document.getElementById("country").value;
+                setError("err-country", country === "");
+                if (country === "") isValid = false;
+
+                // Payment mode (exactly one)
+                const payments = document.querySelectorAll(
+                    'input[name="payment"]:checked',
+                );
+                setError("err-payment", payments.length !== 1);
+                if (payments.length !== 1) isValid = false;
+
+                if (isValid) {
+                    // Simulate DB Submission
+                    const formData = {
+                        firstName: document.getElementById("fname").value,
+                        lastName: document.getElementById("lname").value,
+                        email: document.getElementById("email").value,
+                        arrival: document.getElementById("arrival").value,
+                        departure: document.getElementById("departure").value,
+                        country: document.getElementById("country").value,
+                        payment: payments[0].value,
+                    };
+                    console.log("Submitting to DB:", formData);
+                    alert(
+                        "Booking data submitted successfully to the database!",
+                    );
+                    document.getElementById("bookingForm").reset();
+                }
+                return false;
+            }
+
+            document
+                .getElementById("bookingForm")
+                .addEventListener("submit", validateForm);
+
+            // Clear inline errors on user input
+            document.querySelectorAll("input, select").forEach((el) => {
+                el.addEventListener("input", function () {
+                    const errId = "err-" + this.id;
+                    if (document.getElementById(errId))
+                        document.getElementById(errId).style.display = "none";
+                });
+            });
+        </script>
+    </body>
+</html>
